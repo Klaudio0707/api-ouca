@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import conectarAoBanco from './src/config/dbConfig.js'; // Importa a função de conexão com o banco
 
 // Substitui __dirname para ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -79,10 +80,24 @@ app.post('/empresas', authenticate, (req, res) => {
   res.status(201).json(novaEmpresa);
 });
 
+// Conexão com o MongoDB
+(async () => {
+  try {
+    console.log('Tentando conectar ao banco de dados...');
+    const mongoClient = await conectarAoBanco(process.env.STRING_CONEXAO);
+    app.locals.mongoClient = mongoClient; // Disponibiliza o cliente MongoDB para uso em rotas
+    console.log('✅ Conexão com o MongoDB estabelecida com sucesso!');
+  } catch (error) {
+    console.error('❌ Erro ao conectar ao banco de dados:', error.message);
+    process.exit(1); // Encerra o processo em caso de falha
+  }
+})();
+
 // Inicia o servidor
 app.listen(PORT, () => {
-  console.log(`Servidor escutando na porta ${PORT}...`);
+  console.log(`🌐 Servidor rodando na porta ${PORT}`);
 });
+
 
 
 
