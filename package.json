@@ -4,10 +4,12 @@
   "description": "",
   "main": "server.js",
   "type": "module",
-  "scripts": {
-    "dev": "node --watch --env-file=.env server.js",
-    "test": "node testConnection.js"
-  },
+ "scripts": {
+  "start": "node server.js", 
+  "dev": "node --watch server.js", 
+  "test": "node testConnection.js"
+}
+,
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
