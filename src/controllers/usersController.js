@@ -3,6 +3,7 @@ import {
   createUser as modelCreateUser,
   atualizarUser as modelAtualizarUser,
   excluirUser as modelExcluirUser,
+  getUserById as modelGetUserById, // Novo model
 } from "../models/oucaModel.js";
 
 export async function listarUsuarios(req, res) {
@@ -19,12 +20,25 @@ export async function criarUsuario(req, res) {
   const novoUsuario = req.body;
   try {
     const resultado = await modelCreateUser(novoUsuario);
-    res
-      .status(201)
-      .json({ message: "Usuário criado com sucesso", id: resultado.insertedId });
+    res.status(201).json({ message: "Usuário criado com sucesso", id: resultado.insertedId });
   } catch (erro) {
     console.error("Erro ao criar usuário:", erro.message);
     res.status(500).json({ message: "Erro ao criar usuário" });
+  }
+}
+
+export async function buscarUsuarioPorId(req, res) {
+  const id = req.params.id;
+  
+  try {
+    const usuario = await modelGetUserById(id);
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+    res.status(200).json(usuario);
+  } catch (erro) {
+    console.error("Erro ao buscar usuário:", erro.message);
+    res.status(500).json({ message: "Erro ao buscar usuário" });
   }
 }
 
