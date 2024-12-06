@@ -34,10 +34,21 @@ import {
 } from '../controllers/usersController.js';
 
 const corsOptions = {
-  origin: `http://localhost:${process.env.PORT || 3000}`,
-  optionsSuccessStatus: 200,
-};
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      `http://localhost:${process.env.PORT || 3000}`,
+      'https://oucaminhvoz.netlify.app',
+    ];
 
+    // Permite origens que estão na lista
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  optionsSuccessStatus: 200, // Para compatibilidade com navegadores antigos
+};
 const routes = (app) => {
   // Configura o middleware do Express
   app.use(express.json());
