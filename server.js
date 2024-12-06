@@ -1,9 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors'; // Importe o pacote CORS
 import path from 'path';
 import { fileURLToPath } from 'url';
-import conectarAoBanco from './src/config/dbConfig.js'; // Importa a função de conexão com o banco
-import routes from './src/routes/oucaRoutes.js'; // Importa as rotas configuradas no arquivo oucaRoutes
+import conectarAoBanco from './src/config/dbConfig.js';
+import routes from './src/routes/oucaRoutes.js';
 
 // Substitui __dirname para ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -11,12 +12,28 @@ const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
-const app = express(); // Inicializa o app 
+const app = express();
 
 const PORT = process.env.PORT || 3000;
 
 // Middleware para interpretar JSON
 app.use(express.json());
+
+// Configuração de CORS
+const allowedOrigins = [
+  'http://localhost:3000', // Ambiente de desenvolvimento
+  'https://oucaminhvoz.netlify.app', // URL de produção no Netlify
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+}));
 
 // Conexão com o MongoDB e inicialização do servidor
 (async () => {
