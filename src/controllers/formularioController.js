@@ -1,4 +1,10 @@
-import { getFormularios, createFormulario, atualizarFormulario, excluirFormulario, getFormularioById } from "../models/oucaModel.js";
+import { 
+  getFormularios, 
+  createFormulario, 
+  atualizarFormulario as atualizarFormularioModel, 
+  excluirFormulario as excluirFormularioModel, // Renomeando para evitar conflito
+  getFormularioById 
+} from "../models/oucaModel.js";
 
 // Lista todos os formulários
 export async function listarFormularios(req, res) {
@@ -43,7 +49,7 @@ export async function atualizarFormulario(req, res) {
   const { id } = req.params;
   const dadosAtualizados = req.body;
   try {
-    const resultado = await atualizarFormulario(id, dadosAtualizados);
+    const resultado = await atualizarFormularioModel(id, dadosAtualizados);
     if (resultado.modifiedCount === 0) {
       return res.status(404).json({ message: "Formulário não encontrado" });
     }
@@ -58,7 +64,7 @@ export async function atualizarFormulario(req, res) {
 export async function excluirFormulario(req, res) {
   const { id } = req.params;
   try {
-    const resultado = await excluirFormulario(id);
+    const resultado = await excluirFormularioModel(id); // Usando a versão renomeada
     if (resultado.deletedCount === 0) {
       return res.status(404).json({ message: "Formulário não encontrado" });
     }
@@ -68,3 +74,4 @@ export async function excluirFormulario(req, res) {
     res.status(500).json({ message: "Erro ao excluir formulário" });
   }
 }
+

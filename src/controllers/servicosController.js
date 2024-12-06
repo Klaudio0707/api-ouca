@@ -3,8 +3,10 @@ import {
   createServico as modelCreateServico,
   atualizarServico as modelAtualizarServico,
   excluirServico as modelExcluirServico,
+  getServicoById as modelGetServicoById, // Adicionando importação do model para obter serviço por ID
 } from "../models/oucaModel.js";
 
+// Lista todos os serviços
 export async function listarServicos(req, res) {
   try {
     const servicos = await modelGetServicos();
@@ -15,6 +17,7 @@ export async function listarServicos(req, res) {
   }
 }
 
+// Cria um novo serviço
 export async function criarServico(req, res) {
   const novoServico = req.body;
   try {
@@ -28,6 +31,7 @@ export async function criarServico(req, res) {
   }
 }
 
+// Atualiza um serviço por ID
 export async function atualizarServico(req, res) {
   const id = req.params.id;
   const servicoAtualizado = req.body;
@@ -44,6 +48,7 @@ export async function atualizarServico(req, res) {
   }
 }
 
+// Exclui um serviço por ID
 export async function excluirServico(req, res) {
   const id = req.params.id;
 
@@ -56,5 +61,20 @@ export async function excluirServico(req, res) {
   } catch (erro) {
     console.error("Erro ao excluir serviço:", erro.message);
     res.status(500).json({ message: "Erro ao excluir serviço" });
+  }
+}
+
+// Busca um serviço por ID (Função adicionada)
+export async function buscarServicoPorId(req, res) {
+  const { id } = req.params;
+  try {
+    const servico = await modelGetServicoById(id);
+    if (!servico) {
+      return res.status(404).json({ message: "Serviço não encontrado" });
+    }
+    res.status(200).json(servico);
+  } catch (erro) {
+    console.error("Erro ao buscar serviço:", erro.message);
+    res.status(500).json({ message: "Erro ao buscar serviço" });
   }
 }

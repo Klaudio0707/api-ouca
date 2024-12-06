@@ -11,6 +11,8 @@ async function conectarAoBanco() {
   return client.db("backendOuca"); // Retorna a referência do banco
 }
 
+// *** Formulários ***
+
 // Obtém todos os formulários
 export const getFormularios = async () => {
   const db = await conectarAoBanco();
@@ -38,7 +40,14 @@ export const excluirFormulario = async (id) => {
   return await db.collection('formularios').deleteOne({ _id: new ObjectId(id) });
 };
 
-// ** Usuários **
+// Busca um formulário por ID
+export const getFormularioById = async (id) => {
+  const db = await conectarAoBanco();
+  const colecao = db.collection('formularios');
+  return await colecao.findOne({ _id: new ObjectId(id) });
+};
+
+// *** Usuários ***
 
 // Obtém todos os usuários
 export async function getUsers() {
@@ -71,34 +80,37 @@ export async function excluirUser(id) {
   return await colecao.deleteOne({ _id: new ObjectId(id) });
 }
 
-// Função para obter um usuário por ID
+// Busca um usuário por ID
 export async function getUserById(id) {
   const db = await conectarAoBanco();
   const colecao = db.collection("users");
 
-  // Usando ObjectId para garantir que o id está no formato correto do MongoDB
   const usuario = await colecao.findOne({ _id: new ObjectId(id) });
-
   return usuario;
 }
-
-// ** Serviços **
-
-// Obtém todos os serviços
+export async function getServicoById(id) {
+  const db = await conectarAoBanco();
+  const colecao = db.collection("servicos");
+  // Usando ObjectId para garantir que o id está no formato correto do MongoDB
+  const servico = await colecao.findOne({ _id: new ObjectId(id) });
+  return servico;
+}
+// *** Serviços ***
+// Função para obter todos os serviços
 export async function getServicos() {
   const db = await conectarAoBanco();
   const colecao = db.collection("servicos");
   return await colecao.find().toArray();
 }
 
-// Cria um novo serviço
+// Função para criar um novo serviço
 export async function createServico(novoServico) {
   const db = await conectarAoBanco();
   const colecao = db.collection("servicos");
   return await colecao.insertOne(novoServico);
 }
 
-// Atualiza um serviço por ID
+// Função para atualizar um serviço por ID
 export async function atualizarServico(id, novoServico) {
   const db = await conectarAoBanco();
   const colecao = db.collection("servicos");
@@ -108,14 +120,15 @@ export async function atualizarServico(id, novoServico) {
   );
 }
 
-// Exclui um serviço por ID
+// Função para excluir um serviço por ID
 export async function excluirServico(id) {
   const db = await conectarAoBanco();
   const colecao = db.collection("servicos");
   return await colecao.deleteOne({ _id: new ObjectId(id) });
 }
 
-// ** Ficha de Inscrição **
+
+// *** Ficha de Inscrição ***
 
 // Obtém todas as fichas de inscrição
 export async function getFichasInscricao() {
@@ -146,4 +159,11 @@ export async function excluirFichaInscricao(id) {
   const db = await conectarAoBanco();
   const colecao = db.collection("fichaInscricao");
   return await colecao.deleteOne({ _id: new ObjectId(id) });
+}
+
+// Busca uma ficha de inscrição por ID
+export async function getFichaInscricaoById(id) {
+  const db = await conectarAoBanco();
+  const colecao = db.collection("fichaInscricao");
+  return await colecao.findOne({ _id: new ObjectId(id) });
 }
