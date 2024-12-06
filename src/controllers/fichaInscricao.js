@@ -5,6 +5,21 @@ import {
   excluirFichaInscricao as modelExcluirFichaInscricao,
 } from "../models/oucaModel.js";
 
+
+export async function buscarFichaPorId(req, res) {
+  const { id } = req.params;
+  try {
+    const ficha = await getFichaById(id);
+    if (!ficha) {
+      return res.status(404).json({ message: "Ficha não encontrada" });
+    }
+    res.status(200).json(ficha);
+  } catch (erro) {
+    console.error("Erro ao buscar ficha:", erro.message);
+    res.status(500).json({ message: "Erro ao buscar ficha" });
+  }
+}
+
 export async function listarFichasInscricao(req, res) {
   try {
     const fichas = await modelGetFichasInscricao();
