@@ -9,7 +9,8 @@ import {
 export async function listarUsuarios(req, res) {
   try {
     const usuarios = await modelGetUsers();
-    res.status(200).json(usuarios);
+    const usuariosValidos = usuarios.filter(user => user.email && user.senha);
+    res.status(200).json(usuariosValidos);
   } catch (erro) {
     console.error("Erro ao listar usuários:", erro.message);
     res.status(500).json({ message: "Erro ao listar usuários" });

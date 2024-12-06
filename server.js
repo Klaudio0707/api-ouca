@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url';
 import conectarAoBanco from './src/config/dbConfig.js';
 import routes from './src/routes/oucaRoutes.js';
 
-// Substitui __dirname para ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -19,21 +18,8 @@ const PORT = process.env.PORT || 3000;
 // Middleware para interpretar JSON
 app.use(express.json());
 
-// Configuração de CORS
-const allowedOrigins = [
-  'http://localhost:3000', // Ambiente de desenvolvimento
-  'https://oucaminhvoz.netlify.app', // URL de produção no Netlify
-];
-
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-}));
+// Configuração de CORS - Aceitar qualquer origem
+app.use(cors());
 
 // Conexão com o MongoDB e inicialização do servidor
 (async () => {
