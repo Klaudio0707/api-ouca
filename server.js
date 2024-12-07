@@ -22,7 +22,7 @@ app.use(express.json());
 // Configuração de CORS
 const allowedOrigins = [
   'https://seu-frontend.netlify.app', // Substitua pelo domínio do seu app no Netlify
-  'http://localhost:3000', // Para desenvolvimento local
+  'http://localhost:3001', // Para desenvolvimento local
 ];
 
 app.use(
@@ -34,6 +34,8 @@ app.use(
         callback(new Error('Origem não permitida pelo CORS'));
       }
     },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
   })
 );
 

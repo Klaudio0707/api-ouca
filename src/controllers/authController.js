@@ -15,7 +15,9 @@ export const login = async (req, res) => {
         return res.status(401).json({ message: 'Email ou senha incorretos.' });
       }
   
-      if (usuario.senha !== senha) {
+      // Verifique se a senha fornecida pelo usuário é a mesma que a armazenada no banco de dados
+      const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+      if (!senhaCorreta) {
         return res.status(401).json({ message: 'Email ou senha incorretos.' });
       }
   
@@ -29,5 +31,4 @@ export const login = async (req, res) => {
       console.error('Erro ao autenticar:', error);
       res.status(500).json({ message: 'Erro no servidor.' });
     }
-  };
-  
+}

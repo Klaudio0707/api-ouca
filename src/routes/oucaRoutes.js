@@ -36,11 +36,26 @@ import {
 const routes = (app) => {
   const router = express.Router();
 
-  // Middleware global
-  router.use(cors());
+  // Configuração de CORS para múltiplas origens (nuvem e localhost)
+  const allowedOrigins = [
+    'https://oucaminhvoz.netlify.app', // URL do frontend na nuvem
+    'http://localhost:3001', // URL do frontend local
+  ];
+
+  const corsOptions = {
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Origem não permitida pelo CORS'));
+      }
+    },
+  };
+
+  router.use(cors(corsOptions));
   router.use(express.json());
 
-  // Rota de login
+  // Rotas de autenticação
   router.post('/login', login);
 
   // Rotas para formulários
