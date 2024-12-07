@@ -14,7 +14,7 @@ dotenv.config();
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-const ENV = process.env.NODE_ENV || 'development';
+const ENV = process.env.STRING_CONEXAO  || 'development';
 
 // Middleware para interpretar JSON
 app.use(express.json());
