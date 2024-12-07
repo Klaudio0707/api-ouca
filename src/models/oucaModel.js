@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { MongoClient, ObjectId } from 'mongodb';
-
+import mongoose from 'mongoose';
 // Conexão com o MongoDB
 const client = new MongoClient(process.env.STRING_CONEXAO);
 
@@ -12,6 +12,33 @@ async function conectarAoBanco() {
 }
 
 // *** Formulários ***
+
+
+const UserSchema = new mongoose.Schema({
+  nomeRepresentante: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  senha: {
+    type: String,
+    required: true,
+  },
+  tipo: {
+    type: String,
+    enum: ['administrador', 'usuario'], // Exemplos de tipos de usuário
+    default: 'usuario',
+  },
+}, {
+  timestamps: true, // Adiciona campos createdAt e updatedAt automaticamente
+});
+
+// Criação do modelo User
+export const User = mongoose.model('User', UserSchema);
 
 // Obtém todos os formulários
 export const getFormularios = async () => {
